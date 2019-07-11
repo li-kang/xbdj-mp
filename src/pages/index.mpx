@@ -1,5 +1,9 @@
 <template>
-  <list></list>
+  <view>
+    <list></list>
+    <van-button plain hairline type="primary">细边框按钮</van-button>
+
+  </view>
 </template>
 
 <script>
@@ -13,7 +17,8 @@
 <script type="application/json">
   {
     "usingComponents": {
-      "list": "../components/list"
+      "list": "../components/list",
+      "van-button": "vant-weapp/dist/button"
     }
   }
 </script>
