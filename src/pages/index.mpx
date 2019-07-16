@@ -2,7 +2,6 @@
   <view>
     <list></list>
     <van-button plain hairline type="primary">细边框按钮</van-button>
-
   </view>
 </template>
 
