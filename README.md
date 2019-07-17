@@ -35,9 +35,16 @@ npm run watch
 
 4. 用小程序 IDE 打开项目
 
+
+### 安装 sass-loader 
+
+```shell
+npm install sass-loader node-sass --save-dev
+```
+
 ### 安装 Vant
 
-1. 在`src`目录下正常安装 `vant-weapp`
+1. 在项目目录下正常安装 `vant-weapp`
 > 在 `MPX` 中使用第三方包，不需要构建 `npm` ，`MPX` 会自动检查你使用的 `npm` 包，并按需编译到 `dist` 目录中。
 
 ```shell
