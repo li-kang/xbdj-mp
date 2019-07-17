@@ -2,7 +2,7 @@
   <view class="container">
     <import src="template_goods_edit.wxml"></import>
 
-    <include src="../include_link_header.wxml" />
+    <include src="../common/include_link_header_create.wxml" />
     <van-cell-group title="团购商品列表">
       <template is="goods-edit" wx:for="{{link.goods}}" wx:key="index" data="{{ goods:link.goods, index }}"/>
     </van-cell-group>
@@ -74,7 +74,7 @@ createPage({
 </script>
 
 <style>
-@import url(../include_link_header.wxss);
+@import url('../common/include_link_header_create.wxss');
 
 .goods-item {
   margin-top: 10rpx;
