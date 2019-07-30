@@ -12,7 +12,8 @@
       <van-switch-cell
         name="enable_express"
         title="是否支持配送到家"
-        checked="{{_checked}}"
+        data-key="enable_express"
+        checked="{{link.enable_express}}"
         bind:change="onChange"
         border
       />
@@ -40,10 +41,22 @@ createPage({
     link: {
       title: 's',
       content: {},
-      goods: [{}, {}],
-      delivery: null,
+      goods: [{name: '西红柿', price: 300, specification: '500g'}, {}],
+      delivery: [{}, {}],
       enable_express: false,
     }
+  },
+  onChange(ev) {
+    // ev.detail;
+    // ev.target.dataset.key
+    console.log(ev)
+    let key = ev.target.dataset.key
+    // if (key.endWith('.price')) {
+    //   ev.detail = parseFloat(ev.detail) * 100 
+    // }
+    this.setData({
+      ['link.'+key]: ev.detail
+    })
   },
   onShow() {
     // 所在页面显示之后就会执行一

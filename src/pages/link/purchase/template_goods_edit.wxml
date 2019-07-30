@@ -5,13 +5,13 @@
     data-index="{{index}}"
     catchtap="removeGoods"
     >X</view> -->
-    <van-field label="商品{{index+1}}" placeholder="商品名称" confirm-type="next" wx:model="{{goods[index].name}}"
-      data-index="{{index}}" data-name="name" required="{{validate['goods_'+index+'_name']}}"
-      error-message="{{validate['goods_'+index+'_name']}}" />
+    <van-field label="商品{{index+1}}" placeholder="商品名称" confirm-type="next" value="{{goods[index].name}}"
+      data-key="goods[{{index}}].name" required="{{validate['goods_'+index+'_name']}}"
+      error-message="{{validate['goods_'+index+'_name']}}" bind:change="onChange"/>
     <van-field label="规格" placeholder="每份5斤" confirm-type="next" value="{{goods[index].specification}}"
-      data-index="{{index}}" data-name="specification" />
+    data-key="goods[{{index}}].specification" bind:change="onChange"/>
     <van-field label="价格" placeholder="每份价格" confirm-type="next" type="digit"
-      value="{{goods[index].price / 100 || '' }}" data-index="{{index}}" data-name="price"
-      required="{{validate['goods_'+index+'_price']}}" error-message="{{validate['goods_'+index+'_price']}}" />
+      value="{{goods[index].price / 100 || '' }}" data-key="goods[{{index}}].price"
+      required="{{validate['goods_'+index+'_price']}}" error-message="{{validate['goods_'+index+'_price']}}" bind:change="onChange"/>
   </van-cell-group>
 </template>

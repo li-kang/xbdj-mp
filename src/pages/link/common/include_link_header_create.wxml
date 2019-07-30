@@ -15,8 +15,8 @@
 
 <!-- 标题和内容 -->
 <van-cell-group border="{{false}}">
-  <van-field name="title" placeholder="接龙主题" required="{{validate['title']}}" error-message="{{validate['title']}}" value="{{title}}" bind:change="syncTitle" />
-  <van-field type="textarea" placeholder="说两句，让大家更积极的参与您的接龙。" value="{{content[0].data}}" bind:change="syncContent" border="{{false}}" autosize />
+  <van-field name="title" placeholder="接龙主题" required="{{validate['title']}}" error-message="{{validate['title']}}" data-key="title" value="{{link.title}}" bind:change="onChange" />
+  <van-field type="textarea" placeholder="说两句，让大家更积极的参与您的接龙。" border="{{false}}" data-key="content.text" value="{{link.content.text}}"autosize bind:change="onChange" />
 </van-cell-group>
 
 <!-- 图片 -->
