@@ -6,12 +6,13 @@
     catchtap="removeGoods"
     >X</view> -->
     <van-field label="商品{{index+1}}" placeholder="商品名称" confirm-type="next" value="{{goods[index].name}}"
-      data-key="goods[{{index}}].name" required="{{validate['goods_'+index+'_name']}}"
-      error-message="{{validate['goods_'+index+'_name']}}" bind:change="onChange"/>
+      data-key="goods[{{index}}].name"  data-rule="goods.name"
+      required="{{validate['goods_'+index+'_name']}}"
+      error-message="{{validate['goods_'+index+'_name']}}" bind:change="onChange" bind:blur="onblur"/>
     <van-field label="规格" placeholder="每份5斤" confirm-type="next" value="{{goods[index].specification}}"
     data-key="goods[{{index}}].specification" bind:change="onChange"/>
     <van-field label="价格" placeholder="每份价格" confirm-type="next" type="digit"
-      value="{{goods[index].price  || '' }}" data-key="goods[{{index}}].price"
-      required="{{validate['goods_'+index+'_price']}}" error-message="{{validate['goods_'+index+'_price']}}" bind:change="onChange"/>
+      value="{{goods[index].price  || '' }}" data-key="goods[{{index}}].price" data-rule="goods.price"
+      required="{{validate['goods_'+index+'_price']}}" error-message="{{validate['goods_'+index+'_price']}}" bind:change="onChange" bind:blur="onblur"/>
   </van-cell-group>
 </template>

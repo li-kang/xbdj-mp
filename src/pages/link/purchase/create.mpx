@@ -23,6 +23,7 @@
         placeholder="请输入自提点"
         icon="location"
         data-key="delivery[{{index}}].address"
+        data-rule="delivery.address"
         value="{{ link.delivery[index].address }}"
         bind:change="onChange"
         bind:click-icon="setLocation"
@@ -36,8 +37,9 @@
 
 <script>
 import { createPage } from "@mpxjs/core";
+import Validator from "../../../api/validator.js"
 // import Notify from 'vant-weapp/notify/notify'
-
+const validator = new Validator()
 createPage({
   data: {
     link: {
@@ -46,24 +48,89 @@ createPage({
       goods: [{name: '西红柿', price: 300, specification: '500g'}],
       delivery: [{}],
       enable_express: false,
+    },
+    validateresult: {
+      title: {},
+      goods: [{name:{}, price: {}, specification: {}}],
+      delivery: [{address:{}}],
+    },
+    validatelist:{
+      title: [
+        { rule: 'required', message: '此处为必填项，请输入主题' },
+      ],
+      goods:{
+        name: [
+          { rule: 'required', message: '此处为必填项，请输入商品名称' },
+        ],
+        price: [
+          { rule: 'required', message: '此处为必填项，请输入商品价钱' },
+        ],
+      },
+      delivery: {
+        address: [
+          { rule: 'required', message: '此处为必填项，请输入地址' },
+        ],
+      },
+    },
+  },
+  onblur(ev){
+    let rule = ev.target.dataset.rule
+    let val = ev.detail.value
+    let rules = {}
+    let validateresult = this.data.validateresult
+    let key = ev.target.dataset.key
+    switch (rule) {
+      case 'title':
+        rules = this.data.validatelist[rule]
+        break;
+      case 'goods.name':
+        rules = this.data.validatelist.goods.name
+        break;
+      case 'goods.price':
+        rules = this.data.validatelist.goods.price
+        break;
+      case 'delivery.address':
+        rules = this.data.validatelist.delivery.address
+        break;
+      default:
+        break;
     }
+    // let rules = this.data.validatelist[rule]
+    let validate = validator.validateRules(val,rules)
+    // console.log(key);
+    // console.log(validate);
+    this.setData({
+      ["validateresult."+key]: validate
+    })
+    // console.log(validateresult);
   },
   onChange(ev) {
     let key = ev.target.dataset.key
+    let val = ev.detail
+    console.log(key,val);
     this.setData({
-      ['link.'+key]: ev.detail
+      ['link.'+key]: val
     })
+    console.log(this.data.link);
   },
   addGoods(){
-    let goods = this.data.link.goods;
-    let item = {
+    let linkgoods = this.data.link.goods;
+    let validateresultgoods = this.data.validateresult.goods;
+    let linkitem = {
       name:"",
       price:"",
       specification:""
     };
-    goods.push(item);
+    let validateresultitem = {
+      name:{},
+      price:{},
+      specification:{}
+    };
+    linkgoods.push(linkitem);
+    validateresultgoods.push(validateresultitem);
     this.setData({
-      ['link.goods']:goods
+      ['link.goods']:linkgoods,
+      ['validateresult.goods']:validateresultgoods
     })
   },
   setLocation(){
