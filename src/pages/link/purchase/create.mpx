@@ -47,13 +47,8 @@ createPage({
     }
   },
   onChange(ev) {
-    // ev.detail;
-    // ev.target.dataset.key
     console.log(ev)
     let key = ev.target.dataset.key
-    // if (key.endWith('.price')) {
-    //   ev.detail = parseFloat(ev.detail) * 100 
-    // }
     this.setData({
       ['link.'+key]: ev.detail
     })
