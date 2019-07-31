@@ -11,7 +11,7 @@
     <van-field label="规格" placeholder="每份5斤" confirm-type="next" value="{{goods[index].specification}}"
     data-key="goods[{{index}}].specification" bind:change="onChange"/>
     <van-field label="价格" placeholder="每份价格" confirm-type="next" type="digit"
-      value="{{goods[index].price / 100 || '' }}" data-key="goods[{{index}}].price"
+      value="{{goods[index].price  || '' }}" data-key="goods[{{index}}].price"
       required="{{validate['goods_'+index+'_price']}}" error-message="{{validate['goods_'+index+'_price']}}" bind:change="onChange"/>
   </van-cell-group>
 </template>
