@@ -15,13 +15,13 @@
 
 <!-- 标题和内容 -->
 <van-cell-group border="{{false}}">
-  <van-field name="title" placeholder="接龙主题" required="{{validate['title']}}" error-message="{{validate['title']}}" data-key="title" value="{{link.title}}" bind:change="onChange" />
+  <van-field name="title" placeholder="接龙主题" required="{{ validateResult.title.result!==undefined && !validateResult.title.result }}" error-message="{{validateResult.title.message}}"  data-key="title" data-rule="title" value="{{link.title}}" bind:change="onChange" bind:blur="onBlur"/>
   <van-field type="textarea" placeholder="说两句，让大家更积极的参与您的接龙。" border="{{false}}" data-key="content.text" value="{{link.content.text}}"autosize bind:change="onChange" />
 </van-cell-group>
 
 <!-- 图片 -->
 
 <view class="image-list">
-  <image wx:for="{{link.content.images}}" src="{{item}}" />
+  <image wx:for="{{link.content.images}}" wx:key="{{index}}" src="{{item}}" />
 </view>
 <view class="more" catchtap="onAddImages">+添加图片</view>
