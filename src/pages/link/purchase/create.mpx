@@ -106,7 +106,7 @@ createPage({
 </script>
 
 <style>
-@import url('../common/include_link_header_create.wxss');
+@import url('../common/include_link_header.wxss');
 
 .goods-item {
   margin-top: 10rpx;

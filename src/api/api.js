@@ -30,9 +30,12 @@ class API {
       url: `${options.baseURL || this.config().baseURL}${options.url}`,
       header: {
         ...(this.config().headers)
+      },
+      complete: function () {
+        options.complete && options.complete()
+        wx.hideNavigationBarLoading()
       }
     }).then((res) => {
-      wx.hideNavigationBarLoading()
       switch (res.statusCode) {
         case 200:
           return res.data
@@ -47,7 +50,7 @@ class API {
 // 默认请求配置
 API._config = {
   default: {
-    baseURL: 'http://127.0.0.1:8000/api/v1/',
+    baseURL: 'http://127.0.0.1:8000/api/v1',
     headers: {
       'Authorization': ''
       // 'Accept': 'application/json, text/plain, */*',
