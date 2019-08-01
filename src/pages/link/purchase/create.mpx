@@ -47,23 +47,10 @@ createPage({
     }
   },
   onChange(ev) {
-    console.log(ev)
-    let key = ev.target.dataset.key
+    let {key} = ev.target.dataset
 
     this.setData({
       ['link.'+key]: ev.detail
-    })
-  },
-
-  onAddImages(ev) {
-    mpx.chooseImage({
-      sizeType: 'original',
-      sourceType: 'album'
-    }).then(res=>{
-      console.log(res.tempFilePaths)
-      this.setData({
-        'link.content.images': res.tempFilePaths
-      })
     })
   },
 
@@ -131,6 +118,7 @@ createPage({
 {
   "navigationBarTitleText": "创建团购活动",
   "usingComponents": {
+    "em-images": "../../../components/images",
     "van-cell": "vant-weapp/lib/cell",
     "van-cell-group": "vant-weapp/lib/cell-group",
     "van-field": "vant-weapp/lib/field",
