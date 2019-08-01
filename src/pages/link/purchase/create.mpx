@@ -4,7 +4,7 @@
 
     <include src="../common/include_link_header_create.wxml" />
     <van-cell-group title="团购商品列表">
-      <template is="goods-edit" wx:for="{{link.goods}}" wx:key="index" data="{{ goods:link.goods, index }}"/>
+      <template is="goods-edit" wx:for="{{link.goods}}" wx:key="index" data="{{ goods:link.goods, validateResult,index }}"/>
     </van-cell-group>
     <view class="more" catchtap="addGoods">+添加更多商品</view>
     <van-cell-group title="接龙设置">
@@ -71,7 +71,7 @@ createPage({
     this.setData({
       ['link.'+key]: ev.detail
     })
-    console.log(this.data.link)
+    console.log('onChange',this.data.link)
   },
 
   onBlur(ev){
@@ -79,8 +79,9 @@ createPage({
     let val = ev.detail.value
     let rules = {}
     let validateResult = this.data.validateResult
-    console.log(rule);
     let key = ev.target.dataset.key
+    // console.log('onBlur',validateResult);
+    console.log(rule,val,key);
     switch (rule) {
       case 'title':
         rules = this.data.validateList.title
@@ -95,12 +96,11 @@ createPage({
         break;
     }
     let validate = validator.validateRules(val,rules)
-    // console.log(key);
-    // console.log(validate);
+    console.log(validate);
     this.setData({
       [`validateResult.${key}`]: validate
     })
-    console.log(validateResult);
+    console.log('onBlur',validateResult);
   },
 
   addGoods(){
@@ -122,7 +122,7 @@ createPage({
       'link.goods':linkGoods,
       'validateresult.goods':validateResultGoods
     })
-    console.log(this.data.validateResult)
+    // console.log('addGoods',this.data.validateResult)
   },
 
   onAddImages(ev) {
