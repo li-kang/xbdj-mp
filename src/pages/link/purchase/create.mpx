@@ -33,31 +33,63 @@
 </template>
 
 <script>
-import { createPage } from "@mpxjs/core";
+import mpx, { createPage } from "@mpxjs/core";
 // import Notify from 'vant-weapp/notify/notify'
 
 createPage({
   data: {
     link: {
-      title: 's',
+      title: '',
       content: {},
       goods: [{name: '西红柿', price: 300, specification: '500g'}, {}],
-      delivery: [{}, {}],
       enable_express: false,
+      delivery: [{}, {}],
     }
   },
   onChange(ev) {
-    // ev.detail;
-    // ev.target.dataset.key
     console.log(ev)
     let key = ev.target.dataset.key
-    // if (key.endWith('.price')) {
-    //   ev.detail = parseFloat(ev.detail) * 100 
-    // }
+
     this.setData({
       ['link.'+key]: ev.detail
     })
   },
+
+  onAddImages(ev) {
+    mpx.chooseImage({
+      sizeType: 'original',
+      sourceType: 'album'
+    }).then(res=>{
+      console.log(res.tempFilePaths)
+      this.setData({
+        'link.content.images': res.tempFilePaths
+      })
+    })
+  },
+
+  onSubmit() {
+    let images = this.data.link.content.images
+    console.log(images)
+
+    // 更新临时图片地址
+    for (let i = 0; i < images.length; i++) {
+      const item = images[i];
+      
+      wx.cloud.uploadFile({
+        cloudPath: `temp/${i}.jpg`, // TODO: 设置目录路径
+        filePath: item
+      }).then((res) => {
+        console.log(res)
+        images[i]=res.fileID
+      })
+    }
+
+    this.setData({
+      'link.content.images': this.data.link.content.images
+    })
+
+  },
+
   onShow() {
     // 所在页面显示之后就会执行一
     console.log("page show");

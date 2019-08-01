@@ -4,7 +4,11 @@
 
   mpx.use(apiProxy, {usePromise: true})
   // app.js
-  App({})
+  App({
+    onLaunch: function(){
+      wx.cloud.init()
+    }
+  })
 </script>
 
 
@@ -51,8 +55,8 @@ page {
 <script type="application/json">
   {
     "pages": [
-      "./pages/test",
       "./pages/link/purchase/create",
+      "./pages/test",
       "./pages/index"
     ]
   }

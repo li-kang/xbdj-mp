@@ -8,3 +8,16 @@
 .userinfo .van-cell {
   background: transparent;
 }
+
+.image-list {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-content: space-between;
+}
+
+.image-list image {
+  width: 235rpx;
+  height: 235rpx;
+  padding-top: 8rpx;
+}

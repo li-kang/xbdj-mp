@@ -20,5 +20,8 @@
 </van-cell-group>
 
 <!-- 图片 -->
-<image-group images="{{content[1].data}}" bind:removing="removeImage" edit></image-group>
-<view class="more" catchtap="addImages">+添加图片</view>
+
+<view class="image-list">
+  <image wx:for="{{link.content.images}}" src="{{item}}" />
+</view>
+<view class="more" catchtap="onAddImages">+添加图片</view>
