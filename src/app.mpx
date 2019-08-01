@@ -12,7 +12,9 @@
 </script>
 
 
-<style lang='scss'>
+<style lang='less'>
+@import './style/var.less';
+
 page {
   color: #333;
   background-color: #eee;
@@ -24,7 +26,7 @@ page {
 }
 
 .container {
-  padding: 16rpx;
+  padding: @container-padding;
 }
 
 /* 重置原生 button 样式 */
@@ -55,6 +57,7 @@ page {
 <script type="application/json">
   {
     "pages": [
+      "./pages/link/purchase/details",
       "./pages/link/purchase/create",
       "./pages/test",
       "./pages/index"
