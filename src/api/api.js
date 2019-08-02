@@ -3,11 +3,7 @@ import mpx from '@mpxjs/core'
 
 class API {
   constructor () {
-<<<<<<< Updated upstream
     this.env = 'default';
-=======
-    this.env = 'default'
->>>>>>> Stashed changes
 
     ['delete', 'get', 'head', 'options', 'trace', 'post', 'put', 'patch'].forEach((method) => {
       API.prototype[method] = function (url, data, config) {
