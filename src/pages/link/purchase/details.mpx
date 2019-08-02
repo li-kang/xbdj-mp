@@ -19,8 +19,6 @@
       <!-- 接龙用户列表 -->
     </van-cell-group>
 
-  </view>
-
     <van-goods-action>
       <van-goods-action-icon icon="shop-o" text="管理" />
       <van-goods-action-icon icon="service-o" text="客服" />

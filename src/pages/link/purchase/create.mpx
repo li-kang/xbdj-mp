@@ -37,6 +37,7 @@
 import mpx from "@mpxjs/core";
 // import Notify from 'vant-weapp/notify/notify'
 import Validator from "../../../api/validator.js"
+
 const validator = new Validator()
 const validateList = {
   title: [
@@ -72,23 +73,17 @@ Page({
     this.setData({
       ['link.'+key]: ev.detail
     })
-    console.log('onChange',this.data.link)
   },
 
   onBlur(ev){
     let { rule,key }= ev.target.dataset
-    // console.log(rule,key)
     let val = ev.detail.value
     let rules = validateList[rule]
     let validate = validator.validateRules(val,rules)
-    // let message = ""
-    // if(!validate.result){
-    //   message = validate.message
-    // }
+
     this.setData({
       [`validateResult.${key}`]: validate.result ? null : validate.message
     })
-    console.log('onBlur',this.data.validateResult);
   },
 
   addGoods(){
@@ -102,7 +97,6 @@ Page({
       'link.goods':linkGoods,
       'validateresult.goods':validateResultGoods
     })
-    // console.log('addGoods',this.data.validateResult)
   },
 
   onSubmit() {
