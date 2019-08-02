@@ -17,57 +17,55 @@
         border
       />
       <van-field
+        wx:for="{{link.delivery}}" wx:key="{{index}}"
         label="提货点"
         placeholder="请输入自提点"
         icon="location"
-        data-key="delivery[{{0}}].address"
-        value="{{ link.delivery[0].address }}"
+        data-key="delivery[{{index}}].address"
+        value="{{ link.delivery[index].address }}"
         bind:change="onChange"
         bind:click-icon="setLocation"
         bind:focus="onLocationFocus"
       ></van-field>
     </van-cell-group>
-    <view class="more" catchtap="addGoods">+添加提货点</view>
+    <view class="more" catchtap="addLocation">+添加提货点</view>
     <button type="primary" open-type="getUserInfo" style="margin-top:20rpx;" bindtap="onSubmit">发布接龙</button>
   </view>
 </template>
 
 <script>
-import mpx, { createPage } from "@mpxjs/core";
+import mpx from "@mpxjs/core";
 // import Notify from 'vant-weapp/notify/notify'
 import Validator from "../../../api/validator.js"
 const validator = new Validator()
-createPage({
+const validateList = {
+  title: [
+    { rule: 'required', message: '此处为必填项，请输入主题' },
+  ],
+  goodsName: [
+    { rule: 'required', message: '此处为必填项，请输入商品名称' },
+  ],
+  goodsPrice: [
+    { rule: 'required', message: '此处为必填项，请输入商品价钱' },
+  ],
+}
+Page({
   data: {
     link: {
       title: '',
       content: {},
       goods: [{name: '西红柿', price: 300, specification: '500g'}],
       enable_express: false,
-      delivery: [],
+      delivery: [{},{}],
     },
     validateResult: {
       title: {},
       goods: [{name:{}, price: {}, specification: {}}]
     },
-    validateList:{
-      title: [
-        { rule: 'required', message: '此处为必填项，请输入主题' },
-      ],
-      goods:{
-        name: [
-          { rule: 'required', message: '此处为必填项，请输入商品名称' },
-        ],
-        price: [
-          { rule: 'required', message: '此处为必填项，请输入商品价钱' },
-        ],
-      }
-    },
   },
 
   onChange(ev) {
     let {key} = ev.target.dataset
-
     this.setData({
       ['link.'+key]: ev.detail
     })
@@ -75,47 +73,24 @@ createPage({
   },
 
   onBlur(ev){
-    let rule = ev.target.dataset.rule
+    let { rule,key }= ev.target.dataset
+    // console.log(rule,key)
     let val = ev.detail.value
-    let rules = {}
-    let validateResult = this.data.validateResult
-    let key = ev.target.dataset.key
-    // console.log('onBlur',validateResult);
-    console.log(rule,val,key);
-    switch (rule) {
-      case 'title':
-        rules = this.data.validateList.title
-        break;
-      case 'goods.name':
-        rules = this.data.validateList.goods.name
-        break;
-      case 'goods.price':
-        rules = this.data.validateList.goods.price
-        break;
-      default:
-        break;
-    }
+    let rules = validateList[rule]
     let validate = validator.validateRules(val,rules)
-    console.log(validate);
+    // delete this.data.validateResult.title
+
     this.setData({
       [`validateResult.${key}`]: validate
     })
-    console.log('onBlur',validateResult);
+    console.log('onBlur',this.data.validateResult);
   },
 
   addGoods(){
     let linkGoods = this.data.link.goods;
     let validateResultGoods = this.data.validateResult.goods;
-    let linkItem = {
-      name:"",
-      price:"",
-      specification:""
-    };
-    let validateResultItem = {
-      name:{},
-      price:{},
-      specification:{}
-    };
+    let linkItem = {}
+    let validateResultItem = {}
     linkGoods.push(linkItem);
     validateResultGoods.push(validateResultItem);
     this.setData({
@@ -138,7 +113,7 @@ createPage({
         cloudPath: `temp/${i}.jpg`, // TODO: 设置目录路径
         filePath: item
       }).then((res) => {
-        console.log(res)
+        // console.log(res)
         images[i]=res.fileID
       })
     }
