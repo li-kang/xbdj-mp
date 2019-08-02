@@ -48,6 +48,9 @@ const validateList = {
   goodsPrice: [
     { rule: 'required', message: '此处为必填项，请输入商品价钱' },
   ],
+  goodsSpecification: [
+    { rule: 'required', message: '此处为必填项，请输入商品价钱' },
+  ],
 }
 Page({
   data: {
@@ -59,8 +62,8 @@ Page({
       delivery: [{},{}],
     },
     validateResult: {
-      title: {},
-      goods: [{name:{}, price: {}, specification: {}}]
+      title: "",
+      goods: [{name:"", price:"", specification:""}]
     },
   },
 
@@ -78,10 +81,12 @@ Page({
     let val = ev.detail.value
     let rules = validateList[rule]
     let validate = validator.validateRules(val,rules)
-    // delete this.data.validateResult.title
-
+    // let message = ""
+    // if(!validate.result){
+    //   message = validate.message
+    // }
     this.setData({
-      [`validateResult.${key}`]: validate
+      [`validateResult.${key}`]: validate.result ? null : validate.message
     })
     console.log('onBlur',this.data.validateResult);
   },
@@ -127,6 +132,7 @@ Page({
   onShow() {
     // 所在页面显示之后就会执行一
     console.log("page show");
+    console.log('onShow',this.data.validateResult);
   },
   onHide() {
     // 页面切入后台执行
