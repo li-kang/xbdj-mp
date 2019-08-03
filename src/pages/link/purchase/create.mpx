@@ -39,17 +39,18 @@ import mpx from "@mpxjs/core";
 import Validator from "../../../api/validator.js"
 
 const validator = new Validator()
+// 备注  ^goods\[\d+\]\.price$   \ 这个斜线用RegExp不识别，故改用通配符模糊查找
 const validateList = {
-  title: [
+  'title': [
     { rule: 'required', message: '此处为必填项，请输入主题' },
   ],
-  goodsName: [
+  'goods(.*)name': [
     { rule: 'required', message: '此处为必填项，请输入商品名称' },
   ],
-  goodsPrice: [
+  'goods(.*)price': [
     { rule: 'required', message: '此处为必填项，请输入商品价钱' },
   ],
-  goodsSpecification: [
+  'goods(.*)specification': [
     { rule: 'required', message: '此处为必填项，请输入商品价钱' },
   ],
 }
@@ -76,11 +77,20 @@ Page({
   },
 
   onBlur(ev){
-    let { rule,key }= ev.target.dataset
+    let { key }= ev.target.dataset
     let val = ev.detail.value
-    let rules = validateList[rule]
+    let rules = []
+    console.log(key)
+    for(let ruleKey in validateList){
+      let re = new RegExp(ruleKey,"i")
+      console.log(re)
+      if(re.test(key)){
+        rules = validateList[ruleKey]
+        console.log(rules)
+        break;
+      }
+    }
     let validate = validator.validateRules(val,rules)
-
     this.setData({
       [`validateResult.${key}`]: validate.result ? null : validate.message
     })
