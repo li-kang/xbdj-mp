@@ -41,24 +41,25 @@
 <script>
 import mpx from "@mpxjs/core";
 // import Notify from 'vant-weapp/notify/notify'
-import Validator from "../../../api/validator.js"
+import Validator from "../../../utils/validator.js"
 
 const validator = new Validator()
 // 备注  ^goods\[\d+\]\.price$   \ 这个斜线用RegExp不识别，故改用通配符模糊查找
+// 更改  在字符串中  \   不被解析   需要输入 \\
 const validateList = {
   'title': [
     { rule: 'required', message: '此处为必填项，请输入主题' },
   ],
-  'goods(.*)name': [
+  'goods\\[\\d+\\]\\.name': [
     { rule: 'required', message: '此处为必填项，请输入商品名称' },
   ],
-  'goods(.*)price': [
+  'goods\\[\\d+\\]\\.price': [
     { rule: 'required', message: '此处为必填项，请输入商品价钱' },
   ],
-  'goods(.*)specification': [
+  'goods\\[\\d+\\]\\.specification': [
     { rule: 'required', message: '此处为必填项，请输入商品规格' },
   ],
-  'delivery(.*)address':[
+  'delivery\\[\\d+\\]\\.address':[
     { rule: 'required', message: '此处为必填项，请输入地址' },
   ],
 }
@@ -88,66 +89,44 @@ Page({
   onBlur(ev){
     let { key }= ev.target.dataset
     let val = ev.detail.value
-    let rules = []
-    console.log(key)
-    for(let ruleKey in validateList){
-      let re = new RegExp(ruleKey,"i")
-      // console.log(re)
-      if(re.test(key)){
-        rules = validateList[ruleKey]
-        console.log(rules)
-        break;
-      }
+    let dataList = {}
+    dataList[key]=val
+    let validateRes = validator.validateForm(dataList,validateList)
+    for(let reskey in validateRes){
+      this.setData({
+        [`validateResult.${reskey}`]: validateRes[reskey]
+      })
     }
-    let validate = validator.validateRules(val,rules)
-    this.setData({
-      [`validateResult.${key}`]: validate.result ? null : validate.message
-    })
+    console.log(this.data.validateResult)
   },
 
   formSubmit(ev) {
-    // console.log('form发生了submit事件，携带数据为：', ev.detail.value)
     let dataList = ev.detail.value
-    for(let dataKey in dataList){
-      // console.log(dataKey,dataList[dataKey])
-      let val = dataList[dataKey]
-      let rules = []
-      for(let ruleKey in validateList){
-        let re = new RegExp(ruleKey,"i")
-        if(re.test(dataKey)){
-          rules = validateList[ruleKey]
-          // console.log(re)
-          // console.log(val)
-          // console.log(rules)
-          // console.log(dataKey)
-          if(!val){val=""}
-          let validate = validator.validateRules(val,rules)
-          // console.log(validate)
-          this.setData({
-            [`validateResult.${dataKey}`]: validate.result ? null : validate.message
-          })
-        }
-      }
+    let validateRes = validator.validateForm(dataList,validateList)
+    for(let key in validateRes){
+      this.setData({
+        [`validateResult.${key}`]: validateRes[key]
+      })
     }
-    // console.log(this.validateResult)
-    // let images = this.data.link.content.images
-    // if(!images){
-    //   return this.data.link
-    // }
-    // // 更新临时图片地址
-    // for (let i = 0; i < images.length; i++) {
-    //   const item = images[i];
-    //   wx.cloud.uploadFile({
-    //     cloudPath: `temp/${i}.jpg`, // TODO: 设置目录路径
-    //     filePath: item
-    //   }).then((res) => {
-    //     // console.log(res)
-    //     images[i]=res.fileID
-    //   })
-    // }
-    // this.setData({
-    //   'link.content.images': this.data.link.content.images
-    // })
+    console.log(this.data.validateResult)
+    let images = this.data.link.content.images
+    if(!images){
+      return this.data.link
+    }
+    // 更新临时图片地址
+    for (let i = 0; i < images.length; i++) {
+      const item = images[i];
+      wx.cloud.uploadFile({
+        cloudPath: `temp/${i}.jpg`, // TODO: 设置目录路径
+        filePath: item
+      }).then((res) => {
+        // console.log(res)
+        images[i]=res.fileID
+      })
+    }
+    this.setData({
+      'link.content.images': this.data.link.content.images
+    })
   },
 
   addGoods(){

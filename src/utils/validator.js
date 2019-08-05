@@ -180,6 +180,45 @@ class Validator {
         }
         return {result: true}
     }
+    //形如 dataList={
+    //     "content.text":"",
+    //     'delivery[0].address':null,
+    //     "goods[0].specification":"500g"
+    // }
+    // validateList = {
+    //     'title': [
+    //       { rule: 'required', message: '此处为必填项，请输入主题' },
+    //     ],
+    //     'goods\\[\\d+\\]\\.name': [
+    //       { rule: 'required', message: '此处为必填项，请输入商品名称' },
+    //     ],
+    //     'goods\\[\\d+\\]\\.price': [
+    //       { rule: 'required', message: '此处为必填项，请输入商品价钱' },
+    //     ],
+    //     'goods\\[\\d+\\]\\.specification': [
+    //       { rule: 'required', message: '此处为必填项，请输入商品规格' },
+    //     ],
+    //     'delivery\\[\\d+\\]\\.address':[
+    //       { rule: 'required', message: '此处为必填项，请输入地址' },
+    //     ],
+    // }
+    validateForm(dataList,validateList){
+        let validateResult = {}
+        for(let dataKey in dataList){
+            let val = dataList[dataKey]
+            let rules = []
+            for(let ruleKey in validateList){
+                let re = new RegExp(ruleKey,"i")
+                if(re.test(dataKey)){
+                    rules = validateList[ruleKey]
+                    if(!val){val=""}
+                    let validate = this.validateRules(val,rules)
+                    validateResult[dataKey] = validate.result ? null : validate.message
+                }
+            }
+        }
+        return validateResult
+    }
 }
 
 export default Validator
