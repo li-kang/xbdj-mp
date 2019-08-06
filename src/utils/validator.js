@@ -202,22 +202,49 @@ class Validator {
     //       { rule: 'required', message: '此处为必填项，请输入地址' },
     //     ],
     // }
-    validateForm(dataList,validateList){
-        let validateResult = {}
-        for(let dataKey in dataList){
-            let val = dataList[dataKey]
-            let rules = []
-            for(let ruleKey in validateList){
-                let re = new RegExp(ruleKey,"i")
-                if(re.test(dataKey)){
-                    rules = validateList[ruleKey]
-                    if(!val){val=""}
-                    let validate = this.validateRules(val,rules)
-                    validateResult[dataKey] = validate.result ? null : validate.message
+    // validateForm(dataList,validateList){
+    //     let validateResult = {}
+    //     for(let dataKey in dataList){
+    //         let val = dataList[dataKey]
+    //         let rules = []
+    //         for(let ruleKey in validateList){
+    //             let re = new RegExp(ruleKey,"i")
+    //             if(re.test(dataKey)){
+    //                 rules = validateList[ruleKey]
+    //                 if(!val){val=""}
+    //                 let validate = this.validateRules(val,rules)
+    //                 validateResult[dataKey] = validate.result ? null : validate.message
+    //             }
+    //         }
+    //     }
+    //     return validateResult
+    // }
+    validateFormItem(dataKey,value,validateList){
+        let rules = []
+        for(let ruleKey in validateList){
+            let re = new RegExp(ruleKey,"i")
+            if(re.test(dataKey)){
+                rules = validateList[ruleKey]
+                let validate = this.validateRules(value,rules)
+                validate.dataKey = dataKey
+                if(!validate.message){
+                    validate.message = null
                 }
+                return validate
             }
         }
-        return validateResult
+    }
+    validateFormAll(dataList,validateList){
+        let validateFormAllResult = {}
+        for(let dataKey in dataList){
+            let val = dataList[dataKey]
+            if(!val){val=""}
+            let validateItem = this.validateFormItem(dataKey,val,validateList)
+            if(validateItem){
+                validateFormAllResult[dataKey] = validateItem.result ? null : validateItem.message
+            }
+        }
+        return validateFormAllResult
     }
 }
 
