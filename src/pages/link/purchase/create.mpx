@@ -20,16 +20,16 @@
         wx:for="{{link.delivery}}" wx:key="{{index}}"
         label="提货点"
         placeholder="请输入自提点"
-        icon="{{ link.delivery[index].address?'cross':'location'}}"
-        data-key="delivery[{{index}}].address"
+        icon="{{ link.delivery[index].name?'cross':'location'}}"
+        data-key="delivery[{{index}}].name"
         data-index="{{index}}"
-        value="{{ link.delivery[index].address }}"
+        value="{{ link.delivery[index].name }}"
         bind:change="onChange"
-        bind:click-icon="{{link.delivery[index].address?'delLocation':'setLocation'}}"
+        bind:click-icon="{{link.delivery[index].name?'onDelLocation':'onSetLocation'}}"
         bind:focus="onLocationFocus"
       ></van-field>
     </van-cell-group>
-    <view class="more" catchtap="addLocation">+添加提货点</view>
+    <view class="more" catchtap="onAddLocation">+添加提货点</view>
     <button type="primary" open-type="getUserInfo" style="margin-top:20rpx;" bindtap="onSubmit">发布接龙</button>
   </view>
 </template>
@@ -38,7 +38,6 @@
 import mpx from "@mpxjs/core";
 // import Notify from 'vant-weapp/notify/notify'
 import Validator from "../../../api/validator.js"
-import kg from "../../../api/wx.js"
 
 const validator = new Validator()
 const validateList = {
@@ -133,10 +132,10 @@ Page({
   },
 
   //获取位置
-  setLocation(ev) {
+  onSetLocation(ev) {
     let { index } = ev.target.dataset;
 
-    kg.chooseLocation().then(res => {
+    mpx.chooseLocation().then(res => {
       this.setData({
         [`link.delivery[${index}]`]: res
       });
@@ -145,7 +144,7 @@ Page({
   },
 
   //删除位置事件
-  delLocation(ev) {
+  onDelLocation(ev) {
     let { index } = ev.target.dataset;
     this.data.link.delivery.splice(index, 1);
     this.setData({
@@ -154,7 +153,7 @@ Page({
   },
 
 //添加位置
-  addLocation() {
+  onAddLocation() {
     this.data.link.delivery.push({});
     this.setData({
       "link.delivery": this.data.link.delivery
