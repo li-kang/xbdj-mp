@@ -67,7 +67,8 @@ Page({
   data: {
     link: {
       title: '',
-      content: {},
+      content: "",
+      images:[],
       goods: [{name: '西红柿', price: 300, specification: '500g'}],
       enable_express: false,
       delivery: [{},{}],
@@ -90,40 +91,21 @@ Page({
     let { key }= ev.target.dataset
     let val = ev.detail.value
     let validateRes = validator.validateFormItem(key,val,validateList)
-    console.log(validateRes)
     this.setData({
-      [`validateResult.${validateRes.dataKey}`]: validateRes.message
+      [`validateResult.${validateRes.key}`]: validateRes.message
     })
-    // console.log(this.data.validateResult)
-    // let { key }= ev.target.dataset
-    // let val = ev.detail.value
-    // let dataList = {}
-    // dataList[key]=val
-    // let validateRes = validator.validateForm(dataList,validateList)
-    // for(let reskey in validateRes){
-    //   this.setData({
-    //     [`validateResult.${reskey}`]: validateRes[reskey]
-    //   })
-    // }
     // console.log(this.data.validateResult)
   },
 
   onSubmit(ev) {
     let dataList = ev.detail.value
-    let validateRes = validator.validateFormAll(dataList,validateList)
+    let validateRes = validator.validateForm(dataList,validateList)
     console.log(validateRes);
     for(let key in validateRes){
       this.setData({
         [`validateResult.${key}`]: validateRes[key]
       })
     }
-    // let dataList = ev.detail.value
-    // let validateRes = validator.validateForm(dataList,validateList)
-    // for(let key in validateRes){
-    //   this.setData({
-    //     [`validateResult.${key}`]: validateRes[key]
-    //   })
-    // }
     // console.log(this.data.validateResult)
     // let images = this.data.link.content.images
     // if(!images){
