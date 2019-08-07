@@ -20,11 +20,12 @@
         wx:for="{{link.delivery}}" wx:key="{{index}}"
         label="提货点"
         placeholder="请输入自提点"
-        icon="location"
+        icon="{{ link.delivery[index].address?'cross':'location'}}"
         data-key="delivery[{{index}}].address"
+        data-index="{{index}}"
         value="{{ link.delivery[index].address }}"
         bind:change="onChange"
-        bind:click-icon="setLocation"
+        bind:click-icon="{{link.delivery[index].address?'delLocation':'setLocation'}}"
         bind:focus="onLocationFocus"
       ></van-field>
     </van-cell-group>
@@ -37,6 +38,8 @@
 import mpx from "@mpxjs/core";
 // import Notify from 'vant-weapp/notify/notify'
 import Validator from "../../../api/validator.js"
+import kg from "../../../api/wx.js"
+
 const validator = new Validator()
 const validateList = {
   title: [
@@ -59,7 +62,7 @@ Page({
       content: {},
       goods: [{name: '西红柿', price: 300, specification: '500g'}],
       enable_express: false,
-      delivery: [{},{}],
+      delivery: [{}],
     },
     validateResult: {
       title: "",
@@ -128,6 +131,37 @@ Page({
     })
 
   },
+
+  //获取位置
+  setLocation(ev) {
+    let { index } = ev.target.dataset;
+
+    kg.chooseLocation().then(res => {
+      this.setData({
+        [`link.delivery[${index}]`]: res
+      });
+    });
+    console.log(this.data.link.delivery);
+  },
+
+  //删除位置事件
+  delLocation(ev) {
+    let { index } = ev.target.dataset;
+    this.data.link.delivery.splice(index, 1);
+    this.setData({
+      "link.delivery": this.data.link.delivery
+    });
+  },
+
+//添加位置
+  addLocation() {
+    this.data.link.delivery.push({});
+    this.setData({
+      "link.delivery": this.data.link.delivery
+    });
+    console.log(this.data.link.delivery);
+  },
+
 
   onShow() {
     // 所在页面显示之后就会执行一
