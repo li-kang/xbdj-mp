@@ -2,6 +2,10 @@
   <view>
     <list></list>
     <van-button plain hairline type="primary">细边框按钮</van-button>
+    <badge text="111" color = 'yellow' >
+      <view class="aaa">sdasdsa</view>
+    </badge>
+    <goods-purchase></goods-purchase>
   </view>
 </template>
 
@@ -17,7 +21,9 @@
   {
     "usingComponents": {
       "list": "../components/list",
-      "van-button": "vant-weapp/dist/button"
+      "van-button": "vant-weapp/dist/button",
+      "badge":"../components/badge",
+      "goods-purchase":"../components/goods-purchase"
     }
   }
 </script>
