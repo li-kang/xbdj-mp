@@ -1,6 +1,7 @@
 <template minapp='native' xlang='wxml'>
   <view class="container">
     <import src="template_goods_edit.wxml"></import>
+
     <form bindsubmit="onSubmit">
       <include src="../common/include_link_header_create.wxml" />
       <van-cell-group title="团购商品列表">
@@ -20,15 +21,12 @@
           wx:for="{{link.delivery}}" wx:key="{{index}}"
           label="提货点"
           placeholder="请输入自提点"
-          icon="location"
-          data-key="delivery[{{index}}].address"
-          name="delivery[{{index}}].address"
-          value="{{ link.delivery[index].address }}"
-          required="{{validateResult.delivery[index].address}}" 
-          error-message="{{validateResult.delivery[index].address}}"
+          icon="{{ link.delivery[index].name?'cross':'location'}}"
+          data-key="delivery[{{index}}].name"
+          data-index="{{index}}"
+          value="{{ link.delivery[index].name }}"
           bind:change="onChange"
-          bind:blur="onBlur"
-          bind:click-icon="setLocation"
+          bind:click-icon="{{link.delivery[index].name?'onDelLocation':'onSetLocation'}}"
           bind:focus="onLocationFocus"
         ></van-field>
       </van-cell-group>
@@ -71,7 +69,7 @@ Page({
       images:[],
       goods: [{name: '西红柿', price: 300, specification: '500g'}],
       enable_express: false,
-      delivery: [{},{}],
+      delivery: [{}],
     },
     validateResult: {
       title: "",
@@ -134,6 +132,37 @@ Page({
       'link.goods':linkGoods,
     })
   },
+
+  //获取位置
+  onSetLocation(ev) {
+    let { index } = ev.target.dataset;
+
+    mpx.chooseLocation().then(res => {
+      this.setData({
+        [`link.delivery[${index}]`]: res
+      });
+    });
+    console.log(this.data.link.delivery);
+  },
+
+  //删除位置事件
+  onDelLocation(ev) {
+    let { index } = ev.target.dataset;
+    this.data.link.delivery.splice(index, 1);
+    this.setData({
+      "link.delivery": this.data.link.delivery
+    });
+  },
+
+//添加位置
+  onAddLocation() {
+    this.data.link.delivery.push({});
+    this.setData({
+      "link.delivery": this.data.link.delivery
+    });
+    console.log(this.data.link.delivery);
+  },
+
   onShow() {
     // 所在页面显示之后就会执行一
     console.log("page show");
