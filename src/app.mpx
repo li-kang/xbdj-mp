@@ -1,14 +1,17 @@
 <script>
-  import mpx from '@mpxjs/core'
-  import apiProxy from '@mpxjs/api-proxy'
+import mpx from '@mpxjs/core'
+import apiProxy from '@mpxjs/api-proxy'
+import user from './api/user.js'
 
-  mpx.use(apiProxy, {usePromise: true})
-  // app.js
-  App({
-    onLaunch: function(){
-      wx.cloud.init()
-    }
-  })
+mpx.use(apiProxy, {usePromise: true})
+
+// app.js
+App({
+  onLaunch: function(){
+    wx.cloud.init()
+    user.login()
+  }
+})
 </script>
 
 

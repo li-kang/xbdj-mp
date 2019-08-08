@@ -1,29 +1,29 @@
 <template>
   <view class="list">
     <!-- 商品名字 -->
-    <view class="food-name">{{option.name}}</view>
+    <view class="food-name">{{value.name}}</view>
 
     <!-- 商品价格 -->
     <view class="food-mid">
-      <view class="food-price">￥{{option.price}}/件</view>
-    <!-- 商品步进器 -->
+      <view class="food-price">￥{{value.price/100}}/件</view>
+      <!-- 商品步进器 -->
       <view class="food-btn">
-        <button class="participate" wx:if="{{option.quantity==0}}" bind:tap="onplus">参与购买</button>
         <van-stepper
+          wx:if="{{value.quantity}}" 
+          plus-class="plus"
           bind:minus="onminus"
           bind:plus="onplus"
-          wx:if="{{option.quantity>0}}"
-          plus-class="plus"
-          value="{{option.quantity||0}}"
+          value="{{value.quantity||0}}"
           min="0"
-        ></van-stepper>
+        />
+        <button wx:else class="participate" bind:tap="onplus">参与购买</button>
       </view>
     </view>
 
     <!-- 商品库存已售 -->
     <view class="food-sold">
-      <text class="sold">已售 {{option.sold||0}} 件</text>
-      <text class="inventory">库存 {{option.inventory||0}} 件</text>
+      <text class="sold">已售 {{value.sold||0}} 件</text>
+      <text class="inventory">库存 {{value.inventory||0}} 件</text>
     </view>
   </view>
 </template>
@@ -31,32 +31,31 @@
 <script>
 import { createComponent } from "@mpxjs/core";
 
-Component({
+createComponent({
   data: {},
   properties: {
-    option: {
+    value: {
       type: Object
     }
   },
   methods: {
     onplus() {
-      this.data.option.quantity++;
+      this.data.value.quantity++;
       this.setData({
-        option: this.data.option
+        value: this.data.value
       });
     },
     onminus() {
-      let quantity = this.data.option.quantity;
+      let quantity = this.data.value.quantity;
       quantity <= 0 ? (quantity = 0) : quantity--;
-      this.data.option.quantity = quantity;
+      this.data.value.quantity = quantity;
       this.setData({
-        option: this.data.option
+        value: this.data.value
       });
     }
   }
 });
 </script>
-
 
 <style>
 .list {
@@ -102,10 +101,10 @@ Component({
 </style>
 
 <script type="application/json">
-  {
-    "component": true,
-    "usingComponents": {
-      "van-stepper": "vant-weapp/dist/stepper"
-    }
+{
+  "component": true,
+  "usingComponents": {
+    "van-stepper": "vant-weapp/dist/stepper"
   }
+}
 </script>

@@ -33,7 +33,7 @@ class API {
       header: {
         ...(this.config().headers)
       },
-      complete() {
+      complete () {
         options.complete && options.complete()
         wx.hideNavigationBarLoading()
       }
@@ -55,6 +55,7 @@ API._config = {
     baseURL: 'http://127.0.0.1:8000/api/v1',
     headers: {
       'Authorization': ''
+      // 'Authorization': 'Bearer 13b10a8f79b08d836d1a1a969115e499'
       // 'Accept': 'application/json, text/plain, */*',
       // 'Content-Type': 'application/x-www-form-urlencoded'
       // 'Content-type': 'application/json',

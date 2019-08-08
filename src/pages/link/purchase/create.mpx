@@ -28,9 +28,9 @@
           bind:change="onChange"
           bind:click-icon="{{link.delivery[index].name?'onDelLocation':'onSetLocation'}}"
           bind:focus="onLocationFocus"
-        ></van-field>
+        />
       </van-cell-group>
-      <view class="more" catchtap="addLocation">+添加提货点</view>
+      <view class="more" catchtap="onAddLocation">+添加提货点</view>
       <button type="primary" open-type="getUserInfo" style="margin-top:20rpx;" form-type="submit">发布接龙</button>
     </form>
   </view>
@@ -42,7 +42,7 @@ import mpx from "@mpxjs/core";
 import Validator from "../../../utils/validator.js"
 
 const validator = new Validator()
-// 备注  ^goods\[\d+\]\.price$   \ 这个斜线用RegExp不识别，故改用通配符模糊查找
+// 备注  ^goods\[\d+\]\.price$
 // 更改  在字符串中  \   不被解析   需要输入 \\
 const validateList = {
   'title': [
@@ -71,11 +71,6 @@ Page({
       enable_express: false,
       delivery: [{}],
     },
-    validateResult: {
-      title: "",
-      goods: [{name:"", price:"", specification:""}],
-      delivery:[{address:""}]
-    },
   },
 
   onChange(ev) {
@@ -92,18 +87,20 @@ Page({
     this.setData({
       [`validateResult.${validateRes.key}`]: validateRes.message
     })
-    // console.log(this.data.validateResult)
+    console.log(validateRes.message)
   },
 
   onSubmit(ev) {
     let dataList = ev.detail.value
     let validateRes = validator.validateForm(dataList,validateList)
-    console.log(validateRes);
+
     for(let key in validateRes){
       this.setData({
         [`validateResult.${key}`]: validateRes[key]
       })
     }
+
+
     // console.log(this.data.validateResult)
     // let images = this.data.link.content.images
     // if(!images){
@@ -163,31 +160,6 @@ Page({
     console.log(this.data.link.delivery);
   },
 
-  onShow() {
-    // 所在页面显示之后就会执行一
-    console.log("page show");
-  },
-  onHide() {
-    // 页面切入后台执行
-    console.log("page hide");
-  },
-  methods: {
-    onSubmit() {
-      console.log(this.data.link)
-    },
-    /**
-     * 页面相关事件处理函数--监听用户下拉动作
-     */
-    onPullDownRefresh() {},
-    /**
-     * 页面上拉触底事件的处理函数
-     */
-    onReachBottom() {},
-    /**
-     * 用户点击右上角分享
-     */
-    onShareAppMessage() {}
-  }
 });
 </script>
 
