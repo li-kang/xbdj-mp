@@ -27,7 +27,7 @@
           value="{{ link.delivery[index].name }}"
           bind:change="onChange"
           bind:click-icon="{{link.delivery[index].name?'onDelLocation':'onSetLocation'}}"
-          bind:focus="onLocationFocus"
+          bind:focus="{{link.delivery[index].name?'':'onSetLocation'}}"
         />
       </van-cell-group>
       <view class="more" catchtap="onAddLocation">+添加提货点</view>
@@ -70,6 +70,7 @@ Page({
       goods: [{name: '西红柿', price: 300, specification: '500g'}],
       enable_express: false,
       delivery: [{}],
+      date:"",
     },
   },
 
@@ -146,6 +147,8 @@ Page({
   onDelLocation(ev) {
     let { index } = ev.target.dataset;
     this.data.link.delivery.splice(index, 1);
+    if(!this.data.link.delivery[0])
+      this.data.link.delivery.push({});
     this.setData({
       "link.delivery": this.data.link.delivery
     });
@@ -159,7 +162,13 @@ Page({
     });
     console.log(this.data.link.delivery);
   },
-
+  onShow(){
+    let getDate = new Date();
+    let newDate = getDate.getMonth()+1 + "-" +getDate.getDate()
+    this.setData({
+      date:newDate
+    })
+  }
 });
 </script>
 

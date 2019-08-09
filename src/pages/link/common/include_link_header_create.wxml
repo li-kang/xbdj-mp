@@ -6,7 +6,7 @@
     </view>
     <view slot="title">
       <open-data type="userNickName"></open-data>
-      <view type="danger">8-15</view>
+      <view type="danger">{{date}}</view>
     </view>
   </van-cell>
 </van-cell-group>
