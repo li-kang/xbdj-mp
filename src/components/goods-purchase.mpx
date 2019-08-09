@@ -9,7 +9,7 @@
       <!-- 商品步进器 -->
       <view class="food-btn">
         <van-stepper
-          wx:if="{{value.quantity}}" 
+          wx:if="{{value.quantity}}"
           plus-class="plus"
           bind:minus="onminus"
           bind:plus="onplus"

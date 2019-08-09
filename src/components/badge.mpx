@@ -1,15 +1,16 @@
 <template minapp='native' xlang='wxml'>
-  <view class="badge container">
+  <view class="badge">
     <slot></slot>
-    <van-icon wx:if="{{!hidden}}" name="{{computedName.name}}" class="icon" bind:tap="onTap" />
+    <van-icon wx:if="{{!hidden && icon}}" name="{{icon}}" class="icon" bind:tap="onTap" />
     <view
       class="text"
-      wx:if="{{!hidden && computedName.title && !computedName.name}}"
+      wx:elif="{{!hidden && computedText}}"
       wx:style="{{ {backgroundColor: color} }}"
       bind:tap="onTap"
-    >{{computedName.title}}</view>
+    >{{computedText}}</view>
   </view>
 </template>
+
 
 <script>
 import { createComponent } from "@mpxjs/core";
@@ -25,7 +26,7 @@ createComponent({
     },
     //图标背景颜色
     color: String,
-    hidden: Boolean,
+    hidden: Boolean
   },
   data: {},
   methods: {
@@ -46,17 +47,6 @@ createComponent({
         // 是数字
         return num > 99 ? "99+" : num;
       }
-    },
-    computedName: function() {
-      let name = this.icon;
-      let num = this.computedText;
-      if (name && num) {
-        return { name };
-      } else if (name) {
-        return { name };
-      } else if (num) {
-        return { title: num };
-      }
     }
   }
 });
@@ -65,28 +55,38 @@ createComponent({
 <style lang='less'>
 .container {
   position: relative;
+  .icon {
+    color: red;
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 24rpx;
+  }
+}
+.badge {
+  position: relative;
   display: inline-block;
   .icon {
     color: red;
     position: absolute;
-    top: -15rpx;
+     top: -15rpx;
     right: -20rpx;
     font-size: 24rpx;
   }
-}
-.badge .text {
-  position: absolute;
-  top: -12.5rpx;
-  right: -8rpx;
-  background-color: red;
-  color: white;
-  padding: 4rpx;
-  font-size: 24rpx;
-  height: 20rpx;
-  line-height: 20rpx;
-  min-width: 20rpx;
-  border-radius: 18rpx;
-  transform: translateX(20%) translateY(-20%);
+  .text {
+    position: absolute;
+     top: -15rpx;
+    right: -20rpx;
+    background-color: red;
+    color: white;
+    padding: 4rpx;
+    font-size: 24rpx;
+    height: 20rpx;
+    line-height: 20rpx;
+    min-width: 20rpx;
+    border-radius: 18rpx;
+    transform: translateX(20%) translateY(-20%);
+  }
 }
 </style>
 
