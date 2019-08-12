@@ -47,6 +47,11 @@ class User extends API {
     this.config().headers.Authorization = `Bearer ${token}`
     console.log('login', token)
   }
+
+  // 更新用户信息
+  updateUserInfo() {
+    
+  }
 }
 
 export default new User()

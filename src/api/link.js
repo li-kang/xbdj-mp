@@ -3,7 +3,7 @@ import API from './api'
 class Link extends API {
   // 创建接龙
   create(link) {
-    return this.post('/link/purcharse', link)
+    return this.post('/link/purcharse', link, true)
   }
 
   // 获取接龙详情
