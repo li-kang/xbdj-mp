@@ -40,6 +40,9 @@
 import mpx, {createPage} from "@mpxjs/core";
 // import Notify from 'vant-weapp/notify/notify'
 import Validator from "../../../utils/validator.js"
+// 引用api
+import link from '../../../api/link.js'
+let api = { link }
 
 const validator = new Validator()
 // 备注  ^goods\[\d+\]\.price$
@@ -93,9 +96,21 @@ createPage({
   onSubmit(ev) {
     let dataList = ev.detail.value
     let result = validator.validateForm(dataList,validateList)
-
     this.validate = result
 
+    let verify = true
+    for(let key in result){
+      if(result[key]){
+          verify = false;
+      }
+    }
+    let link = this.data.link
+    console.log(link)
+    if(verify){
+      api.link.create(link).then((res)=>{
+        console.log(res)
+      })
+    }
     // let images = this.data.link.content.images
     // if(!images){
     //   return this.data.link

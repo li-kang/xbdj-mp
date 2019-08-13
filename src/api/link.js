@@ -2,7 +2,7 @@ import API from './api'
 
 class Link extends API {
   // 创建接龙
-  create(link) {
+  create (link) {
     return this.post('/link/purcharse', link, true)
   }
 
