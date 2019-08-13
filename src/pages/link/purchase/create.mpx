@@ -68,14 +68,15 @@ const validateList = {
 createPage({
   data: {
     link: {
+      id:"22",
       title: '',
       content: "",
-      images:[],
       goods: [{name: '西红柿', price: 300, specification: '500g'}],
       enable_express: false,
       delivery: [{}],
     },
-    validate: {}
+    validate: {},
+    images:[],
   },
 
   onChange(ev) {
@@ -85,12 +86,20 @@ createPage({
     })
   },
 
+  onChangeImages(ev){
+    this.images = ev.detail
+    this.$forceUpdate(this.images)
+  },
+
   onBlur(ev){
     let { key }= ev.target.dataset
     let val = ev.detail.value
     let result = validator.validateFormItem(key,val,validateList)
     this.validate[result.key] = result.message
     this.$forceUpdate(this.validate)
+    // console.log(this.validate)
+    // 第一个console数据最新   第二个console数据滞后
+    // console.log(this.data.validate)
   },
 
   onSubmit(ev) {
@@ -104,31 +113,57 @@ createPage({
           verify = false;
       }
     }
-    let link = this.data.link
-    console.log(link)
-    if(verify){
-      api.link.create(link).then((res)=>{
-        console.log(res)
-      })
-    }
-    // let images = this.data.link.content.images
-    // if(!images){
-    //   return this.data.link
-    // }
-    // // 更新临时图片地址
-    // for (let i = 0; i < images.length; i++) {
-    //   const item = images[i];
-    //   wx.cloud.uploadFile({
-    //     cloudPath: `temp/${i}.jpg`, // TODO: 设置目录路径
-    //     filePath: item
-    //   }).then((res) => {
-    //     // console.log(res)
-    //     images[i]=res.fileID
+    let link = this.link
+    // console.log(this.data.link)
+    // console.log(this.link)
+    // 不用setData  换成mpx封装的this进行数据监听刷新
+    // link 就得用this.link获取 变成了类似  mpx的属性了
+    // 反正不影响  就是做个笔记
+
+    // if(verify){
+    //   api.link.create(dataTest).then((res)=>{
+    //     console.log(res)
     //   })
     // }
-    // this.setData({
-    //   'link.content.images': this.data.link.content.images
+
+
+    // 以下仅仅是测试代码
+    // 获取失败   但是Postman软件发送能返回2
+    // let dataTest = {
+    //     "id": 12,
+    //     "title": "每日水果团（演示）3",
+    //     "content": "4加拿大车厘子和香蕉，喜欢吃的，一起来团吧。仅限新龙城用户购买。演示案例，不发货，不退款，请勿大额支付。不发货，不退款，请勿大额支付。不发货，不退款，请勿大额支付。",
+    //     "images_count": 3,
+    //     "goods": [
+    //         {"name": "加拿大车厘子12", "price": 1050, "specification": "3斤/份", "stock": 50 },
+    //         {"name": "香蕉", "price": 530, "specification": "5斤/份", "stock": 50 }
+    //     ],
+    //     "delivery": [{"name": "海淀区人民政府", "address": "北京市海淀区长春桥路17号", "latitude": 39.95933, "longitude": 116.29845}],
+    //     "enable_express": false,
+    //     "status": 1
+    // }
+    // console.log(api.link.create(dataTest))
+    // api.link.create(dataTest).then((res)=>{
+    //     console.log(res)
     // })
+    
+    // 图片数据更新完成
+    let images = this.images
+    if(!images){
+      return
+    }
+    // 更新临时图片地址
+    for (let i = 0; i < images.length; i++) {
+      const item = images[i];
+      wx.cloud.uploadFile({
+        cloudPath: `links/${link.id}/${i}.jpg`, // TODO: 设置目录路径
+        filePath: item
+      }).then((res) => {
+        images[i]=res.fileID
+      })
+    }
+    this.images = images;
+    this.$forceUpdate(this.images)
   },
 
   addGoods(){
