@@ -1,5 +1,6 @@
 <template minapp='native' xlang='wxml'>
   <view class="container">
+    <wxs src="../../../utils/time.wxs" module="Time" />
     <import src="template_goods_edit.wxml"></import>
 
     <form bindsubmit="onSubmit">
@@ -21,13 +22,16 @@
           wx:for="{{link.delivery}}" wx:key="{{index}}"
           label="提货点"
           placeholder="请输入自提点"
-          icon="{{ link.delivery[index].name?'cross':'location'}}"
+          icon="location"
           data-key="delivery[{{index}}].name"
           data-index="{{index}}"
           value="{{ link.delivery[index].name }}"
+          clearable
+          bind:clear="onDelLocation"
           bind:change="onChange"
-          bind:click-icon="{{link.delivery[index].name?'onDelLocation':'onSetLocation'}}"
+          bind:click-icon="onSetLocation"
           bind:focus="{{link.delivery[index].name?'':'onSetLocation'}}"
+          
         />
       </van-cell-group>
       <view class="more" catchtap="onAddLocation">+添加提货点</view>
