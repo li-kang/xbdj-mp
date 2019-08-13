@@ -27,7 +27,7 @@
           value="{{ link.delivery[index].name }}"
           bind:change="onChange"
           bind:click-icon="{{link.delivery[index].name?'onDelLocation':'onSetLocation'}}"
-          bind:focus="onLocationFocus"
+          bind:focus="{{link.delivery[index].name?'':'onSetLocation'}}"
         />
       </van-cell-group>
       <view class="more" catchtap="onAddLocation">+添加提货点</view>
@@ -117,11 +117,7 @@ createPage({
   },
 
   addGoods(){
-    let linkGoods = this.data.link.goods;
-    linkGoods.push({});
-    this.setData({
-      'link.goods':linkGoods,
-    })
+    this.link.goods.push({})
   },
 
   //获取位置
@@ -129,29 +125,24 @@ createPage({
     let { index } = ev.target.dataset;
 
     mpx.chooseLocation().then(res => {
-      this.setData({
-        [`link.delivery[${index}]`]: res
-      });
-    });
-    console.log(this.data.link.delivery);
+      this.link.delivery[index] = res
+    })
   },
 
   //删除位置事件
   onDelLocation(ev) {
-    let { index } = ev.target.dataset;
-    this.data.link.delivery.splice(index, 1);
-    this.setData({
-      "link.delivery": this.data.link.delivery
-    });
+    if (this.link.delivery.length <= 1) {
+      this.link.delivery[0] = {}
+      return
+    }
+
+    let { index } = ev.target.dataset
+    this.link.delivery.splice(index, 1)
   },
 
-//添加位置
+  //添加位置
   onAddLocation() {
-    this.data.link.delivery.push({});
-    this.setData({
-      "link.delivery": this.data.link.delivery
-    });
-    console.log(this.data.link.delivery);
+    this.link.delivery.push({})
   },
 
 });
