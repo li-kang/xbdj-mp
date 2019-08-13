@@ -64,8 +64,8 @@ page {
 <script type="application/json">
   {
     "pages": [
-      "./pages/index",
       "./pages/link/purchase/create",
+      "./pages/index",
       "./pages/link/purchase/details",
       "./pages/test"
     ]

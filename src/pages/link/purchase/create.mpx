@@ -5,7 +5,7 @@
     <form bindsubmit="onSubmit">
       <include src="../common/include_link_header_create.wxml" />
       <van-cell-group title="团购商品列表">
-        <template is="goods-edit" wx:for="{{link.goods}}" wx:key="index" data="{{ goods:link.goods, validateResult,index }}"/>
+        <template is="goods-edit" wx:for="{{link.goods}}" wx:key="index" data="{{ goods:link.goods, validate,index }}"/>
       </van-cell-group>
       <view class="more" catchtap="addGoods">+添加更多商品</view>
       <van-cell-group title="接龙设置">
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import mpx from "@mpxjs/core";
+import mpx, {createPage} from "@mpxjs/core";
 // import Notify from 'vant-weapp/notify/notify'
 import Validator from "../../../utils/validator.js"
 
@@ -61,7 +61,8 @@ const validateList = {
     { rule: 'required', message: '此处为必填项，请输入地址' },
   ],
 }
-Page({
+
+createPage({
   data: {
     link: {
       title: '',
@@ -71,6 +72,7 @@ Page({
       enable_express: false,
       delivery: [{}],
     },
+    validate: {}
   },
 
   onChange(ev) {
@@ -83,25 +85,17 @@ Page({
   onBlur(ev){
     let { key }= ev.target.dataset
     let val = ev.detail.value
-    let validateRes = validator.validateFormItem(key,val,validateList)
-    this.setData({
-      [`validateResult.${validateRes.key}`]: validateRes.message
-    })
-    console.log(validateRes.message)
+    let result = validator.validateFormItem(key,val,validateList)
+    this.validate[result.key] = result.message
+    this.$forceUpdate(this.validate)
   },
 
   onSubmit(ev) {
     let dataList = ev.detail.value
-    let validateRes = validator.validateForm(dataList,validateList)
+    let result = validator.validateForm(dataList,validateList)
 
-    for(let key in validateRes){
-      this.setData({
-        [`validateResult.${key}`]: validateRes[key]
-      })
-    }
+    this.validate = result
 
-
-    // console.log(this.data.validateResult)
     // let images = this.data.link.content.images
     // if(!images){
     //   return this.data.link
