@@ -253,7 +253,6 @@ class Validator {
             let validateItem = this.validateFormItem(key,val,validateList)
             result[key] = validateItem.message
         }
-        console.log(result)
         return result
     }
 }

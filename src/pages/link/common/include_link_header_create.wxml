@@ -18,4 +18,4 @@
 </van-cell-group>
 
 <!-- 图片 -->
-<em-images value="{{[]}}" editable data-key="images" bind:change="onChange"/>
+<em-images value="{{ images }}" editable  bind:changeImages="onChangeImages"/>

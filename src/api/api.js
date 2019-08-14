@@ -3,7 +3,7 @@ import mpx from '@mpxjs/core'
 
 class API {
   constructor () {
-    this.env = 'default';
+    this.env = 'remoteTest';
 
     ['delete', 'get', 'head', 'options', 'trace', 'post', 'put', 'patch'].forEach((method) => {
       API.prototype[method] = function (url, data, withUserInfo, config) {
@@ -40,7 +40,6 @@ class API {
       // 准备头部信息
       let header = {...(this.config().headers), ...options.header}
       if (userInfo) header.UserInfo = userInfo
-      
       // 发启网络请求
       return mpx.request({
         ...options,
@@ -73,6 +72,12 @@ API._config = {
       // 'Accept': 'application/json, text/plain, */*',
       // 'Content-Type': 'application/x-www-form-urlencoded'
       // 'Content-type': 'application/json',
+    }
+  },
+  remoteTest: {
+    baseURL: 'http://101.200.200.17:8000/api/v1',
+    headers: {
+      'Authorization': ''
     }
   }
 }
