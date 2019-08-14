@@ -1,12 +1,12 @@
 <template minapp='native' xlang='wxml'>
   <view class="badge">
     <slot></slot>
-    <van-icon wx:if="{{!hidden && icon}}" name="{{icon}}" class="icon" bind:tap="onTap" />
+    <van-icon wx:if="{{!hidden && icon}}" name="{{icon}}" class="icon" catch:click="onTap" />
     <view
       class="text"
       wx:elif="{{!hidden && computedText}}"
       wx:style="{{ {backgroundColor: color} }}"
-      bind:tap="onTap"
+      bind:click="onTap"
     >{{computedText}}</view>
   </view>
 </template>
@@ -30,8 +30,8 @@ createComponent({
   },
   data: {},
   methods: {
-    onTap() {
-      this.triggerEvent("tap");
+    onTap(ev) {
+      this.triggerEvent("click",ev);
     }
   },
   computed: {
@@ -65,18 +65,17 @@ createComponent({
 }
 .badge {
   position: relative;
-  display: inline-block;
   .icon {
     color: red;
     position: absolute;
-     top: -15rpx;
-    right: -20rpx;
+     top: 5rpx;
+    right: 15rpx;
     font-size: 24rpx;
   }
   .text {
     position: absolute;
-     top: -15rpx;
-    right: -20rpx;
+     top: 5rpx;
+    right: 15rpx;
     background-color: red;
     color: white;
     padding: 4rpx;
