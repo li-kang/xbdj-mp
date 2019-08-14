@@ -67,7 +67,7 @@
 
     watch: {
       images: function (newval, oldval) {
-        this.triggerEvent('changeImages', newval)
+        this.triggerEvent('change', newval)
       },
     }
   })

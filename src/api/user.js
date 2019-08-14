@@ -6,7 +6,7 @@ class User extends API {
   login (userInfo = null) {
     // 微信登录
     return mpx.login()
-      .then((res) => {
+      .then(res => {
         let p = {
           userInfo,
           code: res.code
@@ -15,7 +15,7 @@ class User extends API {
         // 用code登录到我们自己的服务器，并获取登录token。
         return this.post(`/user/wechat/login`, p)
       })
-      .then((res) => {
+      .then(res => {
         // 设置 token
         this.bearer(res)
       })
