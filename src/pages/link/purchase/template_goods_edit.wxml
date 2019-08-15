@@ -9,7 +9,7 @@
       required="{{validate['goods[' + index + '].specification']}}" error-message="{{validate['goods[' + index + '].specification']}}"
       bind:change="onChange" bind:blur="onBlur"/>
     <van-field label="价格" placeholder="每份价格" confirm-type="next" type="digit"
-      value="{{goods[index].price || '' }}" data-key="goods[{{index}}].price" name="goods[{{index}}].price"
-      required="{{validate['goods[' + index + '].price']}}" error-message="{{validate['goods[' + index + '].price']}}" bind:change="onChange" bind:blur="onBlur"/>
+      value="{{goods[index].price/100 || '' }}" data-key="goods[{{index}}].price" name="goods[{{index}}].price"
+      required="{{validate['goods[' + index + '].price']}}" error-message="{{validate['goods[' + index + '].price']}}" bind:change="onPriceChange" bind:blur="onBlur"/>
   </van-cell-group>
 </template>

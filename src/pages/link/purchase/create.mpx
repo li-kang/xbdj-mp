@@ -91,6 +91,12 @@ createPage({
     this.link[key] = ev.detail
   },
 
+  onPriceChange(ev) {
+    let {key} = ev.target.dataset
+    this.link[key] = parseInt(ev.detail * 100)
+    console.log(key, this.link[key])
+  },
+
   onChangeImages(ev){
     this.images = ev.detail
     this.$forceUpdate(this.images)
