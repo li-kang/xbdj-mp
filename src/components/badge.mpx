@@ -1,12 +1,17 @@
 <template minapp='native' xlang='wxml'>
   <view class="badge">
     <slot></slot>
-    <van-icon wx:if="{{!hidden && icon}}" name="{{icon}}" class="icon" catch:click="onTap" />
+    <van-icon 
+      class="icon" 
+      wx:if="{{!hidden && icon}}" 
+      name="{{icon}}" 
+      catch:click="onTap" 
+      />
     <view
       class="text"
       wx:elif="{{!hidden && computedText}}"
       wx:style="{{ {backgroundColor: color} }}"
-      bind:click="onTap"
+      catch:tap="onTap"
     >{{computedText}}</view>
   </view>
 </template>
@@ -31,7 +36,7 @@ createComponent({
   data: {},
   methods: {
     onTap(ev) {
-      this.triggerEvent("click",ev);
+      this.triggerEvent("click", ev);
     }
   },
   computed: {
@@ -53,38 +58,27 @@ createComponent({
 </script>
 
 <style lang='less'>
-.container {
+.badge {
   position: relative;
-  .icon {
-    color: red;
+  .icon,
+  .text {
     position: absolute;
     top: 0;
     right: 0;
-    font-size: 24rpx;
+    transform: translateX(20%) translateY(-20%);
+    padding: 4rpx;
   }
-}
-.badge {
-  position: relative;
   .icon {
-    color: red;
-    position: absolute;
-     top: 5rpx;
-    right: 15rpx;
-    font-size: 24rpx;
+    font-size: 20px;
   }
   .text {
-    position: absolute;
-     top: 5rpx;
-    right: 15rpx;
+    font-size: 24rpx;
     background-color: red;
     color: white;
-    padding: 4rpx;
-    font-size: 24rpx;
     height: 20rpx;
     line-height: 20rpx;
     min-width: 20rpx;
     border-radius: 18rpx;
-    transform: translateX(20%) translateY(-20%);
   }
 }
 </style>
