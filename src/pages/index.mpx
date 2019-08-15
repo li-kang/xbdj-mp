@@ -17,7 +17,7 @@
           <p>纯净水 矿泉水 交替饮用更健康</p>
         </navigator>
         <navigator class="service-item__button" url="/pages/service/water/order/index">
-          <view class="iconfont icon-tongzhuangshui"></view>
+          <view class="iconfont icon-louxiatongzhuangshui"></view>
           <span>一键送水</span>
         </navigator>
       </view>
@@ -40,9 +40,9 @@ createPage({
 });
 </script>
 
-<style lang="less">
-// @import "../style/common";
+<style src="../style/iconfont.wxss"></style>
 
+<style lang="less">
 h2 {
   display: block;
   font-size: 1.3em;
@@ -91,6 +91,7 @@ p {
     white-space: nowrap;
     text-overflow: ellipsis;
   }
+
   &__content {
     display: -webkit-box;
     display: -webkit-flex;
@@ -123,23 +124,23 @@ p {
       font-size: 48px;
       color: #90caf9;
     }
-    &__description {
-      border-top: 1px dashed #ebedf0;
-      background-color: #fafafa;
-      display: flex;
+  }
 
-      .flex-item {
-        text-align: center;
-        padding: 10px 0px;
+  &__description {
+    border-top: 1px dashed #ebedf0;
+    background-color: #fafafa;
+    display: flex;
 
-        &:not(:last-child) {
-          border-right: 1px dashed #ebedf0;
-        }
+    .flex-item {
+      text-align: center;
+      padding: 10px 0px;
+
+      &:not(:last-child) {
+        border-right: 1px dashed #ebedf0;
       }
     }
   }
 }
-
 
 .footer {
   width: 100%;

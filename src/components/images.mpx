@@ -50,7 +50,7 @@
       onPreview(ev) {
         let {index} = ev.target.dataset
         wx.previewImage({
-          current: this.data.images[index], 
+          current: this.data.images[index],
           urls: this.data.images
         })
       },

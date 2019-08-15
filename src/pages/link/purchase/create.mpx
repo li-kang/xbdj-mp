@@ -1,5 +1,6 @@
 <template minapp='native' xlang='wxml'>
   <view class="container">
+    <wxs src="../../../utils/time.wxs" module="Time" />
     <import src="template_goods_edit.wxml"></import>
 
     <form bindsubmit="onSubmit">
@@ -23,13 +24,16 @@
           wx:for="{{link.delivery}}" wx:key="{{index}}"
           label="提货点"
           placeholder="请输入自提点"
-          icon="{{ link.delivery[index].name?'cross':'location'}}"
+          icon="location"
           data-key="delivery[{{index}}].name"
           data-index="{{index}}"
           value="{{ link.delivery[index].name }}"
+          clearable
+          bind:clear="onDelLocation"
           bind:change="onChange"
-          bind:click-icon="{{link.delivery[index].name?'onDelLocation':'onSetLocation'}}"
+          bind:click-icon="onSetLocation"
           bind:focus="{{link.delivery[index].name?'':'onSetLocation'}}"
+          
         />
       </van-cell-group>
       <view class="more" catchtap="onAddLocation">+添加提货点</view>
@@ -43,6 +47,9 @@
 import mpx, {createPage} from "@mpxjs/core";
 // import Notify from 'vant-weapp/notify/notify'
 import Validator from "../../../utils/validator.js"
+// 引用api
+import link from '../../../api/link.js'
+let api = { link }
 
 const validator = new Validator()
 // 备注  ^goods\[\d+\]\.price$
@@ -68,21 +75,25 @@ const validateList = {
 createPage({
   data: {
     link: {
+      id: 0,
       title: '',
-      content: "",
-      images:[],
+      content: '',
       goods: [{name: '西红柿', price: 300, specification: '500g'}],
       enable_express: false,
       delivery: [{}],
     },
-    validate: {}
+    validate: {},
+    images:[],
   },
 
   onChange(ev) {
     let {key} = ev.target.dataset
-    this.setData({
-      ['link.'+key]: ev.detail
-    })
+    this.link[key] = ev.detail
+  },
+
+  onChangeImages(ev){
+    this.images = ev.detail
+    this.$forceUpdate(this.images)
   },
 
   onBlur(ev){
@@ -94,28 +105,55 @@ createPage({
   },
 
   onSubmit(ev) {
-    let dataList = ev.detail.value
-    let result = validator.validateForm(dataList,validateList)
-    this.validate = result
 
-    // let images = this.data.link.content.images
-    // if(!images){
-    //   return this.data.link
+    // 表单验证
+    // let dataList = ev.detail.value
+    // let result = validator.validateForm(dataList,validateList)
+    // this.validate = result
+
+    // let verify = true
+    // for(let key in result){
+    //   if(result[key]){
+    //       verify = false;
+    //   }
     // }
-    // // 更新临时图片地址
-    // for (let i = 0; i < images.length; i++) {
-    //   const item = images[i];
-    //   wx.cloud.uploadFile({
-    //     cloudPath: `temp/${i}.jpg`, // TODO: 设置目录路径
-    //     filePath: item
-    //   }).then((res) => {
-    //     // console.log(res)
-    //     images[i]=res.fileID
-    //   })
-    // }
-    // this.setData({
-    //   'link.content.images': this.data.link.content.images
-    // })
+    // if(!verify) return
+
+    // 以下仅仅是测试代码
+    // 获取失败   但是Postman软件发送能返回2
+    let dataTest = {
+        "id": 12,
+        "title": "每日水果团（演示）3",
+        "content": "4加拿大车厘子和香蕉，喜欢吃的，一起来团吧。仅限新龙城用户购买。演示案例，不发货，不退款，请勿大额支付。不发货，不退款，请勿大额支付。不发货，不退款，请勿大额支付。",
+        "images_count": 3,
+        "goods": [
+            {"name": "加拿大车厘子12", "price": 1050, "specification": "3斤/份", "stock": 50 },
+            {"name": "香蕉", "price": 530, "specification": "5斤/份", "stock": 50 }
+        ],
+        "delivery": [{"name": "海淀区人民政府", "address": "北京市海淀区长春桥路17号", "latitude": 39.95933, "longitude": 116.29845}],
+        "enable_express": false,
+        "status": 1
+    }
+
+    api.link.create(dataTest).then(res=>{
+      console.log(res)
+      let linkId = res
+
+      if(!this.images) return
+
+      // 上传图片
+      for (let i = 0; i < this.images.length; i++) {
+        const item = this.images[i];
+        wx.cloud.uploadFile({
+          cloudPath: `links/${linkId}/${i}.jpg`, // 设置目录路径
+          filePath: item
+        })
+        // .then((res) => {
+        //   // 更新临时图片地址
+        //   this.images[i]=res.fileID
+        // })
+      }
+    })
   },
 
   onAddGoods(){
