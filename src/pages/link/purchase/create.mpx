@@ -6,9 +6,11 @@
     <form bindsubmit="onSubmit">
       <include src="../common/include_link_header_create.wxml" />
       <van-cell-group title="团购商品列表">
-        <template is="goods-edit" wx:for="{{link.goods}}" wx:key="index" data="{{ goods:link.goods, validate,index }}"/>
+      <em-badge icon="clear" wx:for="{{link.goods}}" data-index="{{index}}" wx:key="index" catch:click="onDelGoods">
+        <template is="goods-edit"  data="{{ goods:link.goods, validate,index }}"/>
+      </em-badge>
       </van-cell-group>
-      <view class="more" catchtap="addGoods">+添加更多商品</view>
+      <view class="more" catchtap="onAddGoods">+添加更多商品</view>
       <van-cell-group title="接龙设置">
         <van-switch-cell
           name="enable_express"
@@ -37,6 +39,7 @@
       <view class="more" catchtap="onAddLocation">+添加提货点</view>
       <button type="primary" open-type="getUserInfo" style="margin-top:20rpx;" form-type="submit">发布接龙</button>
     </form>
+    
   </view>
 </template>
 
@@ -102,6 +105,7 @@ createPage({
   },
 
   onSubmit(ev) {
+
     // 表单验证
     // let dataList = ev.detail.value
     // let result = validator.validateForm(dataList,validateList)
@@ -152,10 +156,20 @@ createPage({
     })
   },
 
-  addGoods(){
+  onAddGoods(){
     this.link.goods.push({})
   },
+  //删除Goods
+  onDelGoods(ev){
+  if (this.link.goods.length <= 1) {
+      this.link.goods[0] = {}
+      return
+    }
 
+    let {index} = ev.target.dataset
+    this.link.goods.splice(index,1)
+    console.log()
+  },
   //获取位置
   onSetLocation(ev) {
     let { index } = ev.target.dataset;
@@ -202,7 +216,8 @@ createPage({
     "van-cell-group": "vant-weapp/lib/cell-group",
     "van-field": "vant-weapp/lib/field",
     "van-switch-cell": "vant-weapp/lib/switch-cell",
-    "van-notify": "vant-weapp/lib/notify"
+    "van-notify": "vant-weapp/lib/notify",
+    "em-badge":"../../../components/badge.mpx"
   }
 }
 </script>
