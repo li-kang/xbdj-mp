@@ -47,8 +47,10 @@
 import mpx, {createPage} from "@mpxjs/core";
 // import Notify from 'vant-weapp/notify/notify'
 import Validator from "../../../utils/validator.js"
+import Ext from "../../../utils/ext.js"
 // 引用api
 import link from '../../../api/link.js'
+
 let api = { link }
 
 const validator = new Validator()
@@ -88,13 +90,12 @@ createPage({
 
   onChange(ev) {
     let {key} = ev.target.dataset
-    this.link[key] = ev.detail
+    Ext.setData(this.link, key, ev.detail)
   },
 
   onPriceChange(ev) {
     let {key} = ev.target.dataset
-    this.link[key] = parseInt(ev.detail * 100)
-    console.log(key, this.link[key])
+    Ext.setData(this.link, key, parseInt(ev.detail * 100))
   },
 
   onChangeImages(ev){
@@ -141,25 +142,25 @@ createPage({
         "status": 1
     }
 
-    api.link.create(dataTest).then(res=>{
-      console.log(res)
-      let linkId = res
+    // api.link.create(dataTest).then(res=>{
+    //   console.log(res)
+    //   let linkId = res
 
-      if(!this.images) return
+    //   if(!this.images) return
 
-      // 上传图片
-      for (let i = 0; i < this.images.length; i++) {
-        const item = this.images[i];
-        wx.cloud.uploadFile({
-          cloudPath: `links/${linkId}/${i}.jpg`, // 设置目录路径
-          filePath: item
-        })
-        // .then((res) => {
-        //   // 更新临时图片地址
-        //   this.images[i]=res.fileID
-        // })
-      }
-    })
+    //   // 上传图片
+    //   for (let i = 0; i < this.images.length; i++) {
+    //     const item = this.images[i];
+    //     wx.cloud.uploadFile({
+    //       cloudPath: `links/${linkId}/${i}.jpg`, // 设置目录路径
+    //       filePath: item
+    //     })
+    //     // .then((res) => {
+    //     //   // 更新临时图片地址
+    //     //   this.images[i]=res.fileID
+    //     // })
+    //   }
+    // })
   },
 
   onAddGoods(){
