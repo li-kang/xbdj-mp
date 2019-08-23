@@ -1,5 +1,4 @@
 <!-- 用户信息 -->
-
 <van-cell-group border="{{false}}" custom-class="userinfo">
   <van-cell style="background: transparent;">
     <view slot="icon" class="small-icon" style="margin-right: 10px;">
@@ -14,7 +13,7 @@
 
 <!-- 标题和内容 -->
 <view class="title">{{link.title}}</view>
-<text wx:if="{{link.purchase.content}}">{{link.purchase.content}}</text>
+<text wx:if="{{link.content}}">{{link.content}}</text>
 
 <!-- 图片 -->
-<!-- <em-images value="{{link.content.images}}"/> -->
+<em-images value="{{link.images}}"/>

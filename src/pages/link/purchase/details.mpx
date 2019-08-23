@@ -1,24 +1,39 @@
 <template>
   <view class="container">
     <include src="../common/include_link_header_show.wxml" />
+    <!-- TODO: MPX 没有将这些属性没有同步到界面 -->
+    <view hidden>{{link.title}}{{link.images}}{{link.content}}</view>
     <!-- 商品列表 -->
-    <em-goods-purchase wx:for="{{link.purchase.goods}}" value="{{item}}" wx:key="id"/>
+    <em-goods-purchase wx:for="{{link.purchase.goods}}" value="{{item}}" wx:key="id" />
 
-    <van-cell-group title="收货信息" >
+    <van-cell-group title="收货信息">
       <!-- 选择收货地址 -->
       <!-- <van-cell wx:if="{{!follow.address}}" icon="logistics" title="选择收货地址" url="/pages/me/address/index?p=follow.address" is-link center clickable/>
-      <van-cell wx:else icon="logistics" title="{{follow.address.name}} {{follow.address.tel}}" label="{{follow.address.address}} " url="/pages/me/address/index?p=follow.address" is-link border center clickable/> -->
+      <van-cell wx:else icon="logistics" title="{{follow.address.name}} {{follow.address.tel}}" label="{{follow.address.address}} " url="/pages/me/address/index?p=follow.address" is-link border center clickable/>-->
       <!-- 自提点 -->
-      <van-cell wx:if="{{true}}" icon="location" title="自提点" bind:click="onLocation" is-link center clickable/>
+      <van-cell
+        wx:if="{{true}}"
+        icon="location"
+        title="自提点"
+        bind:click="onLocation"
+        is-link
+        center
+        clickable
+      />
       <!-- 留言 -->
-      <van-field left-icon="chat-o" label="留言" placeholder="给发起人留言" value="{{follow.message}}" title-width="90rpx" center/>
+      <van-field
+        left-icon="chat-o"
+        label="留言"
+        placeholder="给发起人留言"
+        value="{{follow.message}}"
+        title-width="90rpx"
+        center
+      />
     </van-cell-group>
 
-    <van-cell-group title="我的接龙" >
+    <van-cell-group title="我的接龙"></van-cell-group>
 
-    </van-cell-group>
-
-    <van-cell-group title="已接龙用户" >
+    <van-cell-group title="已接龙用户">
       <!-- 发起人 -->
 
       <!-- 接龙用户列表 -->
@@ -37,69 +52,91 @@
 </template>
 
 <script>
-import mpx, { createPage } from '@mpxjs/core'
-import link from '../../../api/link.js'
-let api = { link }
+import mpx, { createPage } from "@mpxjs/core";
+const api = {
+  link: require("../../../api/link.js").default
+};
 
 createPage({
   data: {
-    link:{}
+    link: {
+      purchase: {}
+    },
+    // 当前参与接龙数据
+    follow: {}
   },
-  onLoad (options) {
-    api.link.fetch(1).then(res=>{
-      // console.log(this, res)
-      this.setData({
-        link: res
-      })
-    })
+  onLoad(options) {
+    let id = options.id || 1;
+    api.link.load(id).then(res => {
+      // this.link = res
+      this.$set(this.link, res);
+      console.log(res, this.link);
+    });
   },
   onSubmit() {
-    console.log('onSubmit')
+    console.log("onSubmit");
 
     // TODO:准备link 数据
     let link = {
-      "goods": [
-        { "id": 1, "name": "加拿大车厘子", "price": 1050, "specification": "3斤/份", "stock": 50, "quantity": 2 },
-        { "id": 2, "name": "香蕉", "price": 530, "specification": "5斤/份", "stock": 50, "quantity": 1 }
+      goods: [
+        {
+          id: 1,
+          name: "加拿大车厘子",
+          price: 1050,
+          specification: "3斤/份",
+          stock: 50,
+          quantity: 2
+        },
+        {
+          id: 2,
+          name: "香蕉",
+          price: 530,
+          specification: "5斤/份",
+          stock: 50,
+          quantity: 1
+        }
       ],
-      "postscript": "5点取货"
-    }
+      postscript: "5点取货"
+    };
 
     let follow;
 
     // 参与接龙
-    api.link.follow(1, link).then(res=>{
-      let {pay} = res
-      follow = res.follow
-      console.log(res)
+    api.link
+      .follow(1, link)
+      .then(res => {
+        let { pay } = res;
+        follow = res.follow;
+        console.log(res);
 
-      return mpx.requestPayment({
-        ...pay,
-        timeStamp: pay.timestamp,
+        return mpx.requestPayment({
+          ...pay,
+          timeStamp: pay.timestamp
+        });
       })
-    }).then(res=>{
-      return api.link.followSuccess(follow)
-    }).then(floor=>{
-      console.log(floor)
-    })
+      .then(res => {
+        return api.link.followSuccess(follow);
+      })
+      .then(floor => {
+        console.log(floor);
+      });
   }
-})
+});
 </script>
 
 <style>
-@import url('../common/include_link_header.wxss');
+@import url("../common/include_link_header.wxss");
 
 .goods-item {
   margin-top: 10rpx;
 }
-
 </style>
 
 <script type="application/json">
 {
   "usingComponents": {
-    "em-goods-purchase": "../../../components/goods-purchase",
     "em-images": "../../../components/images",
+    "em-goods-purchase": "../../../components/goods-purchase",
     "em-link-follow": "../common/link-follow",
     "van-cell-group": "vant-weapp/lib/cell-group",
     "van-cell": "vant-weapp/lib/cell",

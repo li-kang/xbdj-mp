@@ -7,7 +7,7 @@ class Link extends API {
   }
 
   // 获取接龙详情
-  fetch (id) {
+  load (id) {
     return this.get(`/link/purcharse/${id}`)
   }
 

@@ -1,6 +1,6 @@
 <template minapp='native' xlang='wxml'>
   <view class="container">
-    <wxs src="../../../utils/time.wxs" module="Time" />
+    <wxs src="../../../wxs/time.wxs" module="Time" />
     <import src="template_goods_edit.wxml"></import>
 
     <form bindsubmit="onSubmit">
@@ -61,9 +61,9 @@ import Validator from "../../../utils/validator.js";
 import Ext from "../../../utils/ext.js";
 import Time from "../../../utils/time.js";
 // 引用api
-import link from "../../../api/link.js";
-
-let api = { link };
+const api = {
+  link: require("../../../api/link.js").default
+};
 
 const validator = new Validator();
 // 备注  ^goods\[\d+\]\.price$
@@ -88,29 +88,29 @@ createPage({
   data: {
     link: {
       id: 0,
-      title: "",
+      title: "Title",
       content: "",
+      images: [],
       goods: [{ name: "西红柿", price: 300, specification: "500g" }],
       enable_express: false,
       delivery: [{}]
     },
     validate: {},
-    images: []
+    images: [], // 本地选择的临时图片
   },
 
   onChange(ev) {
     let { key } = ev.target.dataset;
-    Ext.setData(this.link, key, ev.detail);
+    Ext.setData(this.data.link, key, ev.detail);
   },
 
   onPriceChange(ev) {
     let { key } = ev.target.dataset;
-    Ext.setData(this.link, key, parseInt(ev.detail * 100));
+    Ext.setData(this.data.link, key, parseInt(ev.detail * 100));
   },
 
   onChangeImages(ev) {
-    this.images = ev.detail;
-    this.$forceUpdate(this.images);
+    this.data.images = ev.detail;
   },
 
   onBlur(ev) {
@@ -146,19 +146,19 @@ createPage({
     });
 
     // 上传图片
-    this.data.link.images = [];
     let uploads = this._uploadImages();
 
     // 上传图片完成
     Promise.all(uploads)
       .then(res => {
         // 创建接龙
-        let link = this.data.link;
-        return api.link.create(link);
+        this.data.link.status = 1;
+        console.log('create', this.data.link);
+        return api.link.create(this.data.link);
       })
       .then(res => {
         console.log(res);
-        this.data.link.id = res;
+        // this.data.link.id = res;
         wx.hideLoading();
         // TODO: 导航到指定页面
       })
@@ -183,7 +183,7 @@ createPage({
 
   // 上传图片
   _uploadImages() {
-    return this.images.map((item, index, images) => {
+    return this.data.images.map((item, index, images) => {
       // 生成文件名
       let extension = item.split(".").pop();
       let time = Time.format("yyyyMMddhhmmssS");
@@ -192,13 +192,12 @@ createPage({
       // 上传图片
       return wx.cloud
         .uploadFile({
-          cloudPath: `links/1/images/${name}`, // 设置目录路径
+          cloudPath: `links/1/images/${name}`, // 设置目录路径 TODO: 设置用户ID
           filePath: item
         })
         .then(res => {
-          // 更新临时图片地址
+          // 更新要提交的图片地址
           this.data.link.images[index] = res.fileID;
-          // console.log(index, this.data.images);
           return res.fileID;
         });
     });
